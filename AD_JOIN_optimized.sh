@@ -79,7 +79,7 @@ get_os_info() {
 install_packages() {
   echo "Installing required packages..."
   # The script will exit on error due to 'set -e'
-  yum install sssd realmd oddjob oddjob-mkhomedir adcli samba-common samba-common-tools krb5-workstation openldap-clients policycoreutils-python -y
+apt -y install sssd-ad sssd-tools realmd adcli oddjob oddjob-mkhomedir samba-common
   echo "Package installation completed successfully."
 }
 
@@ -205,6 +205,13 @@ restart_services() {
   echo "Systemd daemon reloaded."
   echo "Services restarted successfully."
 }
+
+#  Created Home DIR on login
+ pam-auth-update --enable mkhomedir 
+
+# remove sshd block for root account 
+
+rm -rf /etc/ssh/sshd_config.d/*
 
 # Displays a summary of the actions taken
 display_summary() {
